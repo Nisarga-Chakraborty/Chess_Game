@@ -1,0 +1,150 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class Multiplayer extends JFrame {
+
+    Color lightcolor = new Color(222, 184, 135);
+    Color darkcolor = new Color(139, 69, 19);
+
+    JButton[][] boardSquares = new JButton[8][8];
+    ChessPiece[][] pieceGrid = new ChessPiece[8][8];
+
+    int selectedRow = -1, selectedCol = -1;
+    boolean isPieceSelected = false;
+
+    public Multiplayer() {
+        createChessBoard();
+        initializePieces();
+        renderPieces();
+    }
+
+    public void createChessBoard() {
+        setTitle("Chess Board");
+        setSize(720, 720);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        JPanel boardPanel = new JPanel(new GridLayout(8, 8));
+        getContentPane().add(boardPanel);
+
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                JButton square = new JButton();
+                boardSquares[row][col] = square;
+
+                boolean isLight = (row + col) % 2 == 0;
+                square.setBackground(isLight ? lightcolor : darkcolor);
+
+                final int r = row;
+                final int c = col;
+
+                square.addActionListener(e -> handleClick(r, c));
+
+                boardPanel.add(square);
+            }
+        }
+    }
+
+    public void initializePieces() {
+        // Place sample Rooks on the corners
+        pieceGrid[0][0] = new Rook("black");
+        pieceGrid[0][7] = new Rook("black");
+        pieceGrid[7][0] = new Rook("white");
+        pieceGrid[7][7] = new Rook("white");
+
+        pieceGrid[0][1] = new Knight("black");
+        pieceGrid[0][6] = new Knight("black");
+        pieceGrid[7][1] = new Knight("white");
+        pieceGrid[7][6] = new Knight("white");
+
+        pieceGrid[0][2] = new Bishop("black");
+        pieceGrid[0][5] = new Bishop("black");
+        pieceGrid[7][2] = new Bishop("white");
+        pieceGrid[7][5] = new Bishop("white");
+
+        pieceGrid[0][3] = new Queen("black");
+        pieceGrid[7][4] = new Queen("white");
+
+        pieceGrid[0][4] = new King("black");
+        pieceGrid[7][3] = new King("white");
+
+        for (int pb = 0; pb < 8; pb++) {
+            pieceGrid[1][pb] = new Pawn("black");
+        }
+        for (int pw = 0; pw < 8; pw++) {
+            pieceGrid[6][pw] = new Pawn("white");
+        }
+
+    }
+
+    public void renderPieces() {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                ChessPiece piece = pieceGrid[row][col];
+                JButton button = boardSquares[row][col];
+
+                if (piece != null) {
+                    ImageIcon icon = piece.getIcon();
+                    button.setIcon(icon);
+                    button.setText(""); // Hide text if icon is present
+                } else {
+                    button.setIcon(null);
+                    button.setText("");
+                }
+            }
+        }
+    }
+
+    public void handleClick(int row, int col) {
+        if (!isPieceSelected) {
+            selectedRow = row;
+            selectedCol = col;
+            isPieceSelected = true;
+            System.out.println("Selected (" + row + ", " + col + ")");
+        } else {
+            int destRow = row;
+            int destCol = col;
+            ChessPiece selectedPiece = pieceGrid[selectedRow][selectedCol];
+
+            if (selectedPiece != null &&
+                    isBoardAwareValidMove(selectedPiece, selectedRow, selectedCol, destRow, destCol)) {
+
+                pieceGrid[destRow][destCol] = selectedPiece;
+                pieceGrid[selectedRow][selectedCol] = null;
+                System.out.println("Moved " + selectedPiece.getName() +
+                        " from (" + selectedRow + ", " + selectedCol + ") to (" + destRow + ", " + destCol + ")");
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid move for " + selectedPiece.getName() +
+                        " from (" + selectedRow + ", " + selectedCol + ") to (" + destRow + ", " + destCol + ")");
+                System.out.println("Invalid move attempted.");
+            }
+
+            isPieceSelected = false;
+            renderPieces();
+        }
+    }
+
+    public boolean isBoardAwareValidMove(ChessPiece piece, int srcRow, int srcCol, int destRow, int destCol) {
+        if (piece instanceof Rook) {
+            return ((Rook) piece).isValidMove(srcRow, srcCol, destRow, destCol, pieceGrid);
+        } else if (piece instanceof Bishop) {
+            return ((Bishop) piece).isValidMove(srcRow, srcCol, destRow, destCol, pieceGrid);
+        } else if (piece instanceof Queen) {
+            return ((Queen) piece).isValidMove(srcRow, srcCol, destRow, destCol, pieceGrid);
+        } else if (piece instanceof Knight) {
+            // Knights skip over path-checking
+            return piece.isValidMove(srcRow, srcCol, destRow, destCol);
+        } else if (piece instanceof Pawn) {
+            return ((Pawn) piece).isValidMove(srcRow, srcCol, destRow, destCol, pieceGrid);
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Multiplayer game = new Multiplayer();
+            game.setVisible(true);
+        });
+    }
+}
