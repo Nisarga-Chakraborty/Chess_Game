@@ -1,0 +1,118 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ChessMenu extends JFrame {
+
+    public ChessMenu() {
+        setTitle("Chess");
+        setSize(1360, 720);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+
+        // Gradient Background Panel
+        JPanel gradientPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, Color.DARK_GRAY, 0, getHeight(), Color.BLACK);
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        gradientPanel.setLayout(null);
+        setContentPane(gradientPanel);// setting the colour to be that of gradientPanel
+
+        // Title Label
+        JLabel chessLabel = new JLabel("Chess Game");
+        chessLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
+        chessLabel.setForeground(Color.WHITE);
+        chessLabel.setBounds(500, 60, 400, 60);
+        gradientPanel.add(chessLabel);
+
+        // Mode Panel with Glass Effect
+        JPanel modePanel = new JPanel();
+        modePanel.setBackground(new Color(0, 255, 255, 100));
+        modePanel.setBounds(0, 180, 1360, 80);
+        modePanel.setLayout(null);
+        gradientPanel.add(modePanel);
+
+        JLabel modeLabel = new JLabel("Select Mode");
+        modeLabel.setFont(new Font("Times New Roman", Font.BOLD, 35));
+        modeLabel.setForeground(Color.BLACK);
+        modeLabel.setBounds(580, 20, 250, 40);
+        modePanel.add(modeLabel);
+
+        // Player vs Player Button
+        JButton playerVsPlayer = new JButton("Player VS Player");
+        playerVsPlayer.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        playerVsPlayer.setBackground(Color.RED);
+        playerVsPlayer.setForeground(Color.BLACK);
+        playerVsPlayer.setBounds(480, 300, 400, 50);
+        playerVsPlayer.setFocusPainted(false);
+        playerVsPlayer.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
+        gradientPanel.add(playerVsPlayer);
+
+        // Hover effect for Player vs Player
+        playerVsPlayer.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                playerVsPlayer.setBackground(new Color(255, 102, 102));
+            }
+
+            public void mouseExited(MouseEvent e) {
+                playerVsPlayer.setBackground(Color.RED);
+            }
+        });
+
+        // Player vs Computer Button
+        JButton playerVsComputer = new JButton("Player VS Computer");
+        playerVsComputer.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        playerVsComputer.setBackground(Color.RED);
+        playerVsComputer.setForeground(Color.BLACK);
+        playerVsComputer.setBounds(480, 400, 400, 50);
+        playerVsComputer.setFocusPainted(false);
+        playerVsComputer.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2, true));
+        gradientPanel.add(playerVsComputer);
+
+        // Hover effect for Player vs Computer
+        playerVsComputer.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                playerVsComputer.setBackground(new Color(255, 102, 102));
+            }
+
+            public void mouseExited(MouseEvent e) {
+                playerVsComputer.setBackground(Color.RED);
+            }
+        });
+
+        // Button Actions
+        playerVsPlayer.addActionListener(e -> {
+            dispose();
+            try {
+                Multiplayer o = new Multiplayer();
+                o.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace(); // This will tell you if an error is blocking the launch by showing it in the
+                                      // console
+            }
+        });
+        playerVsComputer.addActionListener(e -> {
+            dispose();
+            try {
+                SinglePlayer a = new SinglePlayer();
+                a.setVisible(true);
+            } catch (Exception z) {
+                z.printStackTrace();// catches the error and shows it in the console
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            ChessMenu menu = new ChessMenu();
+            menu.setVisible(true);
+        });
+    }
+}
