@@ -4,7 +4,7 @@ A feature-rich, two-player chess game developed in Java using the Swing framewor
 
 ---
 
-## 🎯 Project Goals 
+## 🎯 Project Goals
 
 - Deliver a **fully playable chess experience** with accurate rule enforcement.
 - Showcase **modular, maintainable code architecture** using object-oriented principles.
