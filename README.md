@@ -64,10 +64,14 @@ A feature-rich, two-player chess game developed in Java using the Swing framewor
 - Java Development Kit (JDK) 17 or higher
 - Any Java IDE (IntelliJ IDEA, Eclipse, VS Code)
 
-# Screenshot
-- Chess_Menu
+# Screenshots
+
+-Options 
+
 <img width="1365" height="720" alt="image" src="https://github.com/user-attachments/assets/449da02b-1cfc-4394-aaf3-624deac93926" />
+
 - Multiplayer and Singleplayer
+- 
   <img width="717" height="719" alt="image" src="https://github.com/user-attachments/assets/2c76e8c9-c32f-42ec-8532-cc24bfba0e27" />
 
 
