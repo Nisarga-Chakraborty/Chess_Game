@@ -20,7 +20,6 @@ A feature-rich, two-player chess game developed in Java using the Swing framewor
 - Legal move validation for all pieces including:
   - Pawn promotion
   - Castling
-  - En passant *(optional, if implemented)*
 - Real-time detection of:
   - **Check**
   - **Checkmate**
